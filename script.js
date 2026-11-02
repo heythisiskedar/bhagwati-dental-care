@@ -47,8 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // OPD Schedule Rules:
     // Morning OPD: 10:00 AM (600 mins) to 2:00 PM (840 mins)
-    // Sterilization Break: 2:00 PM (840 mins) to 5:00 PM (300 mins)
-    // Evening OPD: 5:00 PM (300 mins) to 9:00 PM (1260 mins)
+    // Sterilization Break: 2:00 PM (840 mins) to 5:00 PM (1020 mins)
+    // Evening OPD: 5:00 PM (1020 mins) to 9:00 PM (1260 mins)
     // After Hours: 9:00 PM to 10:00 AM next day
 
     statusDot.className = 'status-dot'; // Reset classes
@@ -56,10 +56,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (totalMinutes >= 600 && totalMinutes < 840) {
       statusText.textContent = 'Morning OPD Live (Open until 2:00 PM)';
       statusDot.classList.add('is-open');
-    } else if (totalMinutes >= 840 && totalMinutes < 1100) {
+    } else if (totalMinutes >= 840 && totalMinutes < 1020) {
       statusText.textContent = 'Sterilization Break (Evening OPD opens at 5:00 PM)';
       statusDot.classList.add('is-break');
-    } else if (totalMinutes >= 1100 && totalMinutes < 1260) {
+    } else if (totalMinutes >= 1020 && totalMinutes < 1260) {
       statusText.textContent = 'Evening OPD Live (Open until 9:00 PM)';
       statusDot.classList.add('is-open');
     } else {
