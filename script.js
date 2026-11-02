@@ -54,16 +54,16 @@ document.addEventListener('DOMContentLoaded', () => {
     statusDot.className = 'status-dot'; // Reset classes
 
     if (totalMinutes >= 600 && totalMinutes < 840) {
-      statusText.textContent = '🟢 Morning OPD Live (Open until 2:00 PM)';
+      statusText.textContent = 'Morning OPD Live (Open until 2:00 PM)';
       statusDot.classList.add('is-open');
     } else if (totalMinutes >= 840 && totalMinutes < 1100) {
-      statusText.textContent = '🟡 Sterilization Break (Evening OPD opens at 5:00 PM)';
+      statusText.textContent = 'Sterilization Break (Evening OPD opens at 5:00 PM)';
       statusDot.classList.add('is-break');
     } else if (totalMinutes >= 1100 && totalMinutes < 1260) {
-      statusText.textContent = '🟢 Evening OPD Live (Open until 9:00 PM)';
+      statusText.textContent = 'Evening OPD Live (Open until 9:00 PM)';
       statusDot.classList.add('is-open');
     } else {
-      statusText.textContent = '🌙 Clinic Closed (Morning OPD opens at 10:00 AM)';
+      statusText.textContent = 'Clinic Closed (Morning OPD opens at 10:00 AM)';
       statusDot.classList.add('is-closed');
     }
   }
@@ -79,8 +79,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const navDrawer = document.getElementById('mobile-nav-drawer');
 
   if (navToggle && navDrawer) {
-    navToggle.addEventListener('click', () => {
+    const closeDrawer = () => {
+      navDrawer.classList.remove('is-open');
+      navToggle.classList.remove('is-active');
+      navToggle.setAttribute('aria-expanded', 'false');
+      navDrawer.hidden = true;
+    };
+
+    navToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
       const isOpen = navDrawer.classList.toggle('is-open');
+      navToggle.classList.toggle('is-active', isOpen);
       navToggle.setAttribute('aria-expanded', isOpen);
       navDrawer.hidden = !isOpen;
     });
@@ -88,11 +97,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // Close drawer when clicking any link inside it
     const drawerLinks = navDrawer.querySelectorAll('a');
     drawerLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        navDrawer.classList.remove('is-open');
-        navToggle.setAttribute('aria-expanded', 'false');
-        navDrawer.hidden = true;
-      });
+      link.addEventListener('click', closeDrawer);
+    });
+
+    // Close drawer when clicking outside
+    document.addEventListener('click', (e) => {
+      if (navDrawer.classList.contains('is-open') && !navDrawer.contains(e.target) && !navToggle.contains(e.target)) {
+        closeDrawer();
+      }
+    });
+
+    // Close drawer on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && navDrawer.classList.contains('is-open')) {
+        closeDrawer();
+        navToggle.focus();
+      }
     });
   }
 
